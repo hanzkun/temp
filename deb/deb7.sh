@@ -67,7 +67,6 @@ echo "screenfetch" >> .profile
 
 # install badvpn
 wget -O /usr/bin/badvpn-udpgw "http://172.245.223.98/volcanos/badvpn-udpgw"
-fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
