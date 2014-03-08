@@ -77,14 +77,6 @@ echo "/bin/false" >> /etc/shells
 service ssh restart
 service dropbear restart
 
-# install badvpn
-wget -O /usr/bin/badvpn-udpgw "https://raw.github.com/hanzkun/temp/master/deb/conf/badvpn-udpgw"
-apt-get -y install screen
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.d/rc.local
-chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.17300
-
 # install fail2ban
 apt-get -y install fail2ban;service fail2ban restart
 
