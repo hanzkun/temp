@@ -29,6 +29,7 @@ apt-get -y --purge remove samba*;
 apt-get -y --purge remove apache2*;
 apt-get -y --purge remove sendmail*;
 apt-get -y --purge remove bind9*;
+apt-get -y --purge remove httpd*;
 
 # update
 apt-get update; apt-get -y upgrade;
