@@ -38,7 +38,7 @@ apt-get update; apt-get -y upgrade;
 
 # install essential package
 #echo "mrtg mrtg/conf_mods boolean true" | debconf-set-selections
-apt-get -y install bmon iftop htop nmap axel nano iptables traceroute sysv-rc-conf dnsutils bc nethogs vnstat less screen psmisc apt-file whois ptunnel ngrep mtr git zsh snmp snmpd snmp-mibs-downloader unzip unrar rsyslog debsums rkhunter
+apt-get -y install bmon nano iptables chkconfig nethogs vnstat less screen psmisc apt-file whois ngrep mtr git zsh snmp snmpd unzip unrar
 apt-get -y install build-essential
 
 # disable exim
@@ -49,7 +49,7 @@ sysv-rc-conf exim4 off
 apt-file update
 
 # setting vnstat
-vnstat -u -i venet0
+vnstat -u -i eth0
 service vnstat restart
 
 # install screenfetch
@@ -60,12 +60,6 @@ chmod +x /usr/bin/screenfetch
 echo "clear" >> .profile
 echo "screenfetch" >> .profile
 
-
-# install badvpn
-wget -O /usr/bin/badvpn-udpgw "http://172.245.223.98/volcanos/badvpn-udpgw"
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
-chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # setting port ssh
 cd
@@ -87,12 +81,6 @@ cd
 # install fail2ban
 apt-get -y install fail2ban;service fail2ban restart
 
-# install squid
-apt-get -y install squid
-wget -O /etc/squid/squid.conf "http://172.245.223.98/volcanos/squid.conf"
-sed -i $MYIP2 /etc/squid/squid.conf;
-service squid restart
-
 # install webmin
 cd
 wget "http://prdownloads.sourceforge.net/webadmin/webmin_1.670_all.deb"
@@ -100,60 +88,65 @@ dpkg --install webmin_1.670_all.deb;
 apt-get -y -f install;
 rm /root/webmin_1.670_all.deb
 service webmin restart
-service vnstat restart
 
-# downlaod script
+#swap memory
+dd if=/dev/zero of=/swapfile bs=1024 count=524288
+mkswap /swapfile
+chown root:root /swapfile
+chmod 0600 /swapfile
+swapon /swapfile
+sed -i '$ i\swapon /swapfile' /etc/rc.local
+sed -i '$ i\swapon /swapfile' /etc/rc.d/rc.local
+
+# sekrip
 cd
 wget -O speedtest_cli.py "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py"
 wget -O bench-network.sh "https://raw.github.com/arieonline/autoscript/master/conf/bench-network.sh"
 wget -O ps_mem.py "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py"
 wget -O limit.sh "http://172.245.223.98/volcanos/limit.sh"
-curl http://172.245.223.98/volcanos/volcanos.sh > volcanos.sh
+curl https://gist.githubusercontent.com/hanzkun/05f30bc0198fd3fba036/raw/44a22c1fa328884a5b8659389bb4a2d43cec1e31/viewlogin.sh > viewlogin.sh
 curl http://172.245.223.98/volcanos/limit.sh > user-limit.sh
 sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.local
 sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.d/rc.local
 chmod +x bench-network.sh
 chmod +x speedtest_cli.py
 chmod +x ps_mem.py
-chmod +x volcanos.sh
+chmod +x viewlogin.sh
 chmod +x user-limit.sh
 chmod +x limit.sh
-
+ 
+# cron
+service crond start
+chkconfig crond on
+ 
 # finalisasi
 service vnstat restart
+#service openvpn restart
 service snmpd restart
-service ssh restart
+service sshd restart
 service dropbear restart
 service fail2ban restart
 service squid restart
 service webmin restart
-
+chkconfig iptables on
+chkconfig squid on
+ 
+ 
 # info
 clear
+echo "==============================================="
+echo ""
+echo "Service"
+echo "-------"
+echo "OpenSSH  : 22, 143, 80"
+echo "Dropbear : 109, 443"
+echo "==============================================="
+echo "Script"
+echo "------"
+echo "./ps_mem.py"
+echo "./speedtest_cli.py --share"
+echo "./bench-network.sh"
+echo "./viewlogin.sh"
+echo "./user-limit.sh 2"
+echo "SILAHKAN REBOOT VPS ANDA !"
 echo "blablablbala" | tee log-install.txt
-echo "===============================================" | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "Service"  | tee -a log-install.txt
-echo "-------"  | tee -a log-install.txt
-echo "OpenSSH  : 22, 80, 443"  | tee -a log-install.txt
-echo "Dropbear : 109, 143"  | tee -a log-install.txt
-echo "Squid    : 8080 (limit to IP SSH)"  | tee -a log-install.txt
-echo "badvpn   : badvpn-udpgw port 7300"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "Tools"  | tee -a log-install.txt
-echo "-----"  | tee -a log-install.txt
-echo "axel"  | tee -a log-install.txt
-echo "bmon"  | tee -a log-install.txt
-echo "htop"  | tee -a log-install.txt
-echo "iftop"  | tee -a log-install.txt
-echo "mtr"  | tee -a log-install.txt
-echo "nethogs"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "Fail2Ban : [on]"  | tee -a log-install.txt
-echo "IPv6     : [off]"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "Log Installasi --> /root/log-install.txt"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "SILAHKAN REBOOT VPS ANDA !"  | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "==============================================="  | tee -a log-install.txt
