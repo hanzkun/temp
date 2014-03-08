@@ -24,11 +24,6 @@ apt-get -y install wget curl
 sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 service ssh restart
 
-# set repo
-wget -O /etc/apt/sources.list "https://raw.github.com/hanzkun/temp/master/deb/conf/sources.list.deb7"
-wget "http://www.dotdeb.org/dotdeb.gpg"
-cat dotdeb.gpg | apt-key add -;rm dotdeb.gpg
-
 # remove unused
 apt-get -y --purge remove samba*;
 apt-get -y --purge remove apache2*;
