@@ -14,7 +14,8 @@ echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 
 # install wget and curl
-apt-get update;apt-get -y install wget curl;
+apt-get update
+apt-get -y install curl
 
 # set time GMT +7
 #ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
@@ -87,19 +88,6 @@ sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 143"/g' /etc/defau
 echo "/bin/false" >> /etc/shells
 service ssh restart
 service dropbear restart
-
-# install vnstat gui
-cd /home/vps/public_html/
-wget http://www.sqweek.com/sqweek/files/vnstat_php_frontend-1.5.1.tar.gz
-tar xf vnstat_php_frontend-1.5.1.tar.gz
-rm vnstat_php_frontend-1.5.1.tar.gz
-mv vnstat_php_frontend-1.5.1 vnstat
-cd vnstat
-sed -i 's/eth0/venet0/g' config.php
-sed -i "s/\$iface_list = array('venet0', 'sixxs');/\$iface_list = array('venet0');/g" config.php
-sed -i "s/\$language = 'nl';/\$language = 'en';/g" config.php
-sed -i 's/Internal/Internet/g' config.php
-sed -i '/SixXS IPv6/d' config.php
 cd
 
 # install fail2ban
@@ -113,7 +101,7 @@ service squid restart
 
 # install webmin
 cd
-wget "http://script.jualssh.com/autoscript/conf/webmin_1.670_all.deb"
+wget "http://prdownloads.sourceforge.net/webadmin/webmin_1.670_all.deb"
 dpkg --install webmin_1.670_all.deb;
 apt-get -y -f install;
 rm /root/webmin_1.670_all.deb
@@ -122,19 +110,18 @@ service vnstat restart
 
 # downlaod script
 cd
-wget --no-check-certificate -O speedtest_cli.py "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py"
-wget -O bench-network.sh "http://script.jualssh.com/autoscript/conf/bench-network.sh"
-wget --no-check-certificate -O ps_mem.py "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py"
+wget -O speedtest_cli.py "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py"
+wget -O bench-network.sh "https://raw.github.com/arieonline/autoscript/master/conf/bench-network.sh"
+wget -O ps_mem.py "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py"
 wget -O limit.sh "http://172.245.223.98/volcanos/limit.sh"
-curl http://172.245.223.98/volcanos/volcanos.sh > user-login.sh
+curl http://172.245.223.98/volcanos/volcanos.sh > volcanos.sh
 curl http://172.245.223.98/volcanos/limit.sh > user-limit.sh
-echo "0 0 * * * root /root/user-expire.sh" > /etc/cron.d/user-expire
 sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.local
+sed -i '$ i\screen -AmdS limit /root/limit.sh' /etc/rc.d/rc.local
 chmod +x bench-network.sh
 chmod +x speedtest_cli.py
 chmod +x ps_mem.py
-chmod +x user-login.sh
-chmod +x user-expire.sh
+chmod +x volcanos.sh
 chmod +x user-limit.sh
 chmod +x limit.sh
 
