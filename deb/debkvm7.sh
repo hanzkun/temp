@@ -38,7 +38,7 @@ apt-get update; apt-get -y upgrade;
 
 # install essential package
 #echo "mrtg mrtg/conf_mods boolean true" | debconf-set-selections
-apt-get -y install bmon nano iptables chkconfig nethogs vnstat less screen psmisc apt-file whois ngrep mtr git zsh snmp snmpd unzip unrar
+apt-get -y install bmon nano iptables chkconfig nethogs vnstat screen apt-file ngrep mtr git snmp snmpd unzip unrar
 apt-get -y install build-essential
 
 # disable exim
@@ -76,7 +76,14 @@ sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 143"/g' /etc/defau
 echo "/bin/false" >> /etc/shells
 service ssh restart
 service dropbear restart
-cd
+
+# install badvpn
+wget -O /usr/bin/badvpn-udpgw "https://raw.github.com/hanzkun/temp/master/deb/conf/badvpn-udpgw"
+apt-get -y install screen
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.d/rc.local
+chmod +x /usr/bin/badvpn-udpgw
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.17300
 
 # install fail2ban
 apt-get -y install fail2ban;service fail2ban restart
