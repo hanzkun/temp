@@ -38,7 +38,7 @@ apt-get update; apt-get -y upgrade;
 
 # install essential package
 #echo "mrtg mrtg/conf_mods boolean true" | debconf-set-selections
-apt-get -y install bmon nano iptables chkconfig nethogs vnstat screen apt-file ngrep mtr git snmp snmpd unzip unrar
+apt-get -y install bmon nano iptables chkconfig nethogs vnstat screen apt-file ngrep mtr git snmp snmpd unzip
 apt-get -y install build-essential
 
 # disable exim
@@ -49,7 +49,7 @@ sysv-rc-conf exim4 off
 apt-file update
 
 # setting vnstat
-vnstat -u -i eth0
+#vnstat -u -i eth0
 service vnstat restart
 
 # install screenfetch
@@ -130,10 +130,9 @@ chkconfig crond on
 service vnstat restart
 #service openvpn restart
 service snmpd restart
-service sshd restart
+service ssh restart
 service dropbear restart
 service fail2ban restart
-service squid restart
 service webmin restart
 chkconfig iptables on
 chkconfig squid on
@@ -147,6 +146,7 @@ echo "Service"
 echo "-------"
 echo "OpenSSH  : 22, 143, 80"
 echo "Dropbear : 109, 443"
+echo "Swap memory 512MB | to check: free -m"
 echo "==============================================="
 echo "Script"
 echo "------"
@@ -155,5 +155,5 @@ echo "./speedtest_cli.py --share"
 echo "./bench-network.sh"
 echo "./viewlogin.sh"
 echo "./user-limit.sh 2"
-echo "SILAHKAN REBOOT VPS ANDA !"
+echo "Reboot your VPS!"
 echo "blablablbala" | tee log-install.txt
