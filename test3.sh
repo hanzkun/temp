@@ -6,7 +6,7 @@ Port="8080 3128 80"
 #squid without password
 #lock only for ip server
 mv /etc/squid3/squid.conf /etc/squid/squid.conf.backup
-wget repo.vpscepat.net/squid.conf
+wget https://raw.github.com/hanzkun/temp/master/deb/conf/squid.conf
 mv squid.conf /etc/squid3/squid.conf
 sed -i s/123.123.123.123/$IP/g /etc/squid3/squid.conf
 service squid3 restart
