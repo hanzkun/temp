@@ -13,8 +13,8 @@ service squid3 restart
 
 echo "******************************************************************"
 echo "*                                                                *"
-echo "*                   Your squid3 has been installed               *"
+echo "*             Your squid3 has been installed - Port 80, 8080     *"
 echo "*         			    With ACL/Lock IP for IP server               *"
-echo "*         			       Enjoy your squid3 proxy...               *"
+echo "*         			       Enjoy your squid3 proxy...                *"
 echo "*                                                                *"
 echo "******************************************************************"
