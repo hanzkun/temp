@@ -9,4 +9,4 @@ mv /etc/squid3/squid.conf /etc/squid/squid.conf.backup
 wget repo.vpscepat.net/squid.conf
 mv squid.conf /etc/squid3/squid.conf
 sed -i s/123.123.123.123/$IP/g /etc/squid3/squid.conf
-service squid restart
+service squid3 restart
